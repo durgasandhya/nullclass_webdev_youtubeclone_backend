@@ -8,13 +8,13 @@ const hasSpecialCharacters = (text) => {
   return specialCharsRegex.test(text);
 };
 
-// Helper function to get city from IP
-const getCityFromIP = async (ip) => {
+// Helper function to get location from IP (matching ThemeContext API)
+const getLocationFromIP = async (ip) => {
   try {
-    // Use user's real IP or default to a public IP for testing
-    const ipToCheck = ip === "::1" || ip === "127.0.0.1" ? "" : ip;
-    const response = await axios.get(`http://ip-api.com/json/${ipToCheck}`);
-    return response.data.city || "Unknown";
+    // Use same API as ThemeContext for consistency
+    const response = await axios.get("https://ipapi.co/json/");
+    // Return state/region instead of city for better location display
+    return response.data.region || response.data.city || "Unknown";
   } catch (error) {
     console.error("Geolocation error:", error);
     return "Unknown";
@@ -31,9 +31,9 @@ export const postcomment = async (req, res) => {
     });
   }
 
-  // Get user's city from IP
+  // Get user's location from IP (state/region)
   const userIP = req.ip || req.connection.remoteAddress;
-  const city = await getCityFromIP(userIP);
+  const city = await getLocationFromIP(userIP);
 
   const postcomment = new comment({
     ...commentdata,
