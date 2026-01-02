@@ -19,8 +19,12 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
-    methods: ["GET", "POST"]
+    origin: [
+      "https://nullclass-webdev-yourtubeclone.vercel.app",
+      "http://localhost:3000"
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 import path from "path";
