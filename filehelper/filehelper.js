@@ -1,8 +1,18 @@
 "use strict";
 import multer from "multer";
+import fs from "fs";
+import path from "path";
+
+// Ensure uploads directory exists
+const uploadsDir = "uploads";
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+  console.log("Created uploads directory");
+}
+
 const storage = multer.diskStorage({
   destination: (req, res, cb) => {
-    cb(null, "uploads");
+    cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
     cb(
